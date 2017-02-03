@@ -38,6 +38,9 @@
 
 #include <Wire.h>
 
+//motor functions
+#include "motordriver_4wd.h"
+#include "seeed_pwm.h"
 
 // The name of the sensor is "MPU-6050".
 // For program code, I omit the '-', 
@@ -708,14 +711,36 @@ void setup()
 
   // Clear the 'sleep' bit to start the sensor.
   MPU6050_write_reg (MPU6050_PWR_MGMT_1, 0);
+
+  MOTOR.init(); //Init all pin
 }
 
+int count = 0;
 
 void loop()
 {
   int error;
   double dT;
   accel_t_gyro_union accel_t_gyro;
+
+  if (count == 5){
+    Serial.print("------------------Motors fwd------------------");
+    MOTOR.setSpeedDir1(60, DIRR); //Set motor 1 direction:DIRR, Speed: (range:0-100).
+    MOTOR.setSpeedDir2(60, DIRF); //Set motor 2 direction:DIRF, Speed: (range:0-100).
+  }/*
+  else if (count == 10){
+    Serial.print("------------------Motors rev------------------");
+    MOTOR.setSpeedDir1(60, DIRF); //Set motor 1 direction:DIRR, Speed: (range:0-100).
+    MOTOR.setSpeedDir2(60, DIRR); //Set motor 2 direction:DIRF, Speed: (range:0-100).
+  }*/
+  else if (count == 10){
+    Serial.print("------------------Motors off------------------");
+    MOTOR.setSpeedDir(0,DIRR);
+  }
+  else if (count == 15){
+    Serial.print("------------------Exit program------------------");
+    exit(0);
+  }
 
 
   Serial.println(F(""));
@@ -775,15 +800,17 @@ void loop()
   // Print the raw gyro values.
 
   Serial.print(F("gyro x,y,z : "));
-  Serial.print(accel_t_gyro.value.x_gyro, DEC);
+  Serial.print(accel_t_gyro.value.x_gyro/131.0, DEC);
   Serial.print(F(", "));
-  Serial.print(accel_t_gyro.value.y_gyro, DEC);
+  Serial.print(accel_t_gyro.value.y_gyro/131.0, DEC);
   Serial.print(F(", "));
-  Serial.print(accel_t_gyro.value.z_gyro, DEC);
+  Serial.print(accel_t_gyro.value.z_gyro/131.0, DEC);
   Serial.print(F(", "));
   Serial.println(F(""));
 
-  delay(250);
+  delay(100);
+
+  count++;
 }
 
 
