@@ -2,7 +2,7 @@
 This class allows control of the HC-SR04 Ultrasonic sensor
 */
 
-#include "HCSR04Ultrasonic.h"
+#include "HCRS04Ultrasonic.h"
 
 HCSR04Ultrasonic::HCSR04Ultrasonic(int triggerPinNum, int echoPinNum) {
 	triggerPin = triggerPinNum;

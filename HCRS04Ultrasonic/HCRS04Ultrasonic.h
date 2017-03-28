@@ -17,3 +17,5 @@ private:
 
 	void init();
 };
+
+#endif
