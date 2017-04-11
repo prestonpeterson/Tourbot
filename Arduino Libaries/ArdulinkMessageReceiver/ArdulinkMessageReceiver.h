@@ -23,7 +23,7 @@ public:
 	void init(bool (*customMessageHandler)(String), void (*keyPressMessageHandler)(char));
 
 	/**
-	* Reads a new message (if any) and replies (if necessary) and then sends pin listener messages, call in loop()
+	* Handles a new Ardulink message (if any) and then sends pin listener messages (if any are assigned), call in loop()
 	*/
 	void processInput();
 
