@@ -29,16 +29,6 @@ void ArdulinkMessageReceiver::init(bool(*customMessageHandler)(String), void(*ke
 		analogPinListening[index] = false;
 		analogPinListenedValue[index] = -1;
 	}
-
-	/* But why?
-
-	// Turn off everything (not on RXTX)
-	for (index = 2; index < digitalPinListeningNum; index++) {
-		pinMode(index, OUTPUT);
-		digitalWrite(index, LOW);
-	}
-
-	*/
 }
 
 void ArdulinkMessageReceiver::processInput() {
