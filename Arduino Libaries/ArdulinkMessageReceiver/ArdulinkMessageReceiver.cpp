@@ -127,6 +127,8 @@ void ArdulinkMessageReceiver::processInput() {
 		inputString = "";
 		stringComplete = false;
 	}
+
+	sendListenMessages();
 }
 
 void ArdulinkMessageReceiver::getInput() {
