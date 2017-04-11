@@ -6,9 +6,10 @@ communication.
 #include <Arduino.h>
 #include "ArdulinkMessageReceiver.h"
 
-void ArdulinkMessageReceiver::init() {
+void ArdulinkMessageReceiver::init(bool(*customMessageHandler)(String)) {
 	inputString = "";
 	stringComplete = false;
+	handleCustomMessage = customMessageHandler;
 
 	Serial.begin(115200);
 
@@ -46,7 +47,17 @@ void ArdulinkMessageReceiver::processInput() {
 
 			boolean msgRecognized = true;
 
-			if (inputString.substring(6, 10) == "kprs") { // KeyPressed
+			if (inputString.substring(6, 10) == "cust") { // Custom Message
+				int messageIdPosition = inputString.indexOf('?', 11);
+				String customMessage;
+				if (messageIdPosition > -1)
+					customMessage = inputString.substring(11, messageIdPosition);
+				else
+					customMessage = inputString.substring(11, inputString.length() - 1); //Ensures \n at end of string is not copied
+
+				msgRecognized = handleCustomMessage(customMessage);
+			}
+			else if (inputString.substring(6, 10) == "kprs") { // KeyPressed
 				// here you can write your own code. For instance the commented code change pin intensity if you press 'a' or 's'
 				// take the command and change intensity on pin 11 this is needed just as example for this sketch
 				//char commandChar = inputString.charAt(14);

@@ -15,7 +15,7 @@ communication.
 
 class ArdulinkMessageReceiver{
 public:
-	void init(); // Call in setup()
+	void init(bool (*customMessageHandler)(String)); // Call in setup(), customMessageHandler is given a custom message and returns if recognized
 	void processInput(); // Call in loop()
 	void getInput(); // Call in serialEvent()
 protected:
@@ -26,6 +26,8 @@ protected:
 	bool analogPinListening[numAnalogPins]; // Array used to know which pins on the Arduino must be listening.
 	int digitalPinListenedValue[numDigitalPins]; // Array used to know which value is read last time.
 	int analogPinListenedValue[numAnalogPins]; // Array used to know which value is read last time.
+
+	bool (*handleCustomMessage)(String);
 
 	void sendReplyMessage(bool validMessage);
 	void sendListenMessages();
