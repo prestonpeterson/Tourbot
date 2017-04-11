@@ -6,10 +6,11 @@ communication.
 #include <Arduino.h>
 #include "ArdulinkMessageReceiver.h"
 
-void ArdulinkMessageReceiver::init(bool(*customMessageHandler)(String)) {
+void ArdulinkMessageReceiver::init(bool(*customMessageHandler)(String), void(*keyPressMessageHandler)(char)) {
 	inputString = "";
 	stringComplete = false;
 	handleCustomMessage = customMessageHandler;
+	handleKeyPressMessage = keyPressMessageHandler;
 
 	Serial.begin(115200);
 
@@ -58,16 +59,8 @@ void ArdulinkMessageReceiver::processInput() {
 				msgRecognized = handleCustomMessage(customMessage);
 			}
 			else if (inputString.substring(6, 10) == "kprs") { // KeyPressed
-				// here you can write your own code. For instance the commented code change pin intensity if you press 'a' or 's'
-				// take the command and change intensity on pin 11 this is needed just as example for this sketch
-				//char commandChar = inputString.charAt(14);
-				//if(commandChar == 'a' and intensity > 0) { // If press 'a' less intensity
-				//  intensity--;
-				//  analogWrite(11,intensity);
-				//} else if(commandChar == 's' and intensity < 125) { // If press 's' more intensity
-				//  intensity++;
-				//  analogWrite(11,intensity);
-				//}
+				char commandChar = inputString.charAt(14);
+				handleKeyPressMessage(commandChar);
 			}
 			else if (inputString.substring(6, 10) == "ppin") { // Power Pin Intensity
 				int separatorPosition = inputString.indexOf('/', 11);

@@ -15,7 +15,12 @@ communication.
 
 class ArdulinkMessageReceiver{
 public:
-	void init(bool (*customMessageHandler)(String)); // Call in setup(), customMessageHandler is given a custom message and returns if recognized
+	/**
+	* Initializes the serial communications and variables needed
+	* @param customMessageHandler A function called whenever a custom message is recieved, given the message as a string
+	* @param keyPressMessageHandler A function called whenever a keypress message is recieved, given the character pressed
+	*/
+	void init(bool (*customMessageHandler)(String), void (*keyPressMessageHandler)(char));
 	void processInput(); // Call in loop()
 	void getInput(); // Call in serialEvent()
 protected:
@@ -28,6 +33,7 @@ protected:
 	int analogPinListenedValue[numAnalogPins]; // Array used to know which value is read last time.
 
 	bool (*handleCustomMessage)(String);
+	void (*handleKeyPressMessage)(char);
 
 	void sendReplyMessage(bool validMessage);
 	void sendListenMessages();
