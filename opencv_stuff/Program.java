@@ -2,48 +2,51 @@
  * Created by Administrator on 4/6/2017.
  */
 
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.File;
-
-import org.opencv.imgproc.Imgproc;
-import org.opencv.imgproc.Imgproc.*;
-
-import static org.opencv.imgcodecs.Imgcodecs.CV_LOAD_IMAGE_COLOR;
-import static org.opencv.imgcodecs.Imgcodecs.imread;
 
 public class Program {
     public static void main(String[] args) {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         try {
-            BufferedImage img = ImageIO.read(new File("src/test1.png"));
-            Mat img = imread("lena.png", CV_LOAD_IMAGE_COLOR); // TODO: USE IMREAD
-            int height = img.getHeight();
-            int width = img.getWidth();
-            Mat mat1 = new Mat(height,width,CvType.CV_32FC3);
-            byte[] data = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
-            mat1.put(0, 0, data);
-
-            BufferedImage img2 = ImageIO.read(new File("src/test2.png"));
-            int h = img2.getHeight();
-            int w = img2.getWidth();
-            Mat mat2 = new Mat(h,w,CvType.CV_32FC3);
-            byte[] data2 = ((DataBufferByte) img2.getRaster().getDataBuffer()).getData();
-            mat2.put(0, 0, data2);
-
-            double result = Imgproc.compareHist(mat1, mat2, Imgproc.CV_COMP_CORREL);
-            System.out.println("Result = " + result);
+            BufferedImage img = ImageIO.read(new File("src/redshirt.jpg"));
+            getPixelPercent(img);
 
         } catch (Exception e) {
             System.out.println(e + "\nOH GOD WHY");
         }
+    }
 
-
+    public static int getPixelPercent(BufferedImage img)
+    {
+        int count = 0;
+        long totalR = 0, totalG = 0, totalB = 0;
+        int maxR = 0, maxG = 0, maxB = 0;
+        for (int r = 0; r < img.getWidth(); r++) {
+            for (int c = 0; c < img.getHeight(); c++) {
+                int rgb = img.getRGB(r,c);
+                int red = (rgb >> 16) & 0xFF;
+                maxR = Math.max(maxR, red);
+                int green = (rgb >> 8) & 0xFF;
+                maxG = Math.max(maxG, green);
+                int blue = rgb & 0xFF;
+                maxB = Math.max(maxB, blue);
+                totalR += red; totalG += green; totalB += blue;
+                if (red >= 202 && green >= 50 && green <= 90 && blue > 30 && blue < 80) {
+                    count++;
+                }
+                //System.out.print("(" + red + "," + green + "," + blue + ") ");
+            }
+            System.out.println();
+        }
+        int total = img.getWidth() * img.getHeight();
+        int avgR = (int) (totalR / total);
+        int avgG = (int) totalG / total;
+        int avgB = (int) totalB / total;
+        //System.out.println("avgR = " + avgR + ", avgG = " + avgG + ", avgB = " + avgB);
+        //System.out.println("maxR = " + maxR + ", maxG = " + maxG + ", maxB = " + maxB);
+        int percent = (count * 100) / total;
+        return percent;
     }
 }
