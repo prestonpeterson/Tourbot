@@ -10,7 +10,7 @@ public:
 	HCSR04Ultrasonic(int triggerPinNum, int echoPinNum);
 	HCSR04Ultrasonic(int triggerPinNum, int echoPinNum, int voltPinNum, int groundPinNum);
 	void init();
-	int getDistanceRaw();
+	unsigned long getDistanceRaw();
 	double getDistanceCm();
 	double getDistanceIn();
 private:

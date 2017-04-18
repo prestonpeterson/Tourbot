@@ -18,7 +18,7 @@ HCSR04Ultrasonic::HCSR04Ultrasonic(int triggerPinNum, int echoPinNum, int voltPi
 	groundPin = groundPinNum;
 }
 
-int HCSR04Ultrasonic::getDistanceRaw(){
+unsigned long HCSR04Ultrasonic::getDistanceRaw(){
 	// The sensor is triggered by a HIGH pulse of 10 or more microseconds.
 	// Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
 	digitalWrite(triggerPin, LOW);
