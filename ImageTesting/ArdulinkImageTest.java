@@ -23,7 +23,7 @@ import org.zu.ardulink.event.ConnectionEvent;
 import org.zu.ardulink.event.ConnectionListener;
 import org.zu.ardulink.event.DisconnectionEvent;
 import org.zu.ardulink.protocol.IProtocol;
-public class ImageTest {
+public class ArdulinkImageTest {
     public static void main(String[] args) {
         int pixelPercentage = 0;
     	
