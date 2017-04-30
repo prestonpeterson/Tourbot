@@ -1,11 +1,14 @@
 /*
-This class implements a modified version of the Ardulink Protocol for serial
-communication.
-*/
+ * This class implements a modified version of the Ardulink Protocol for serial communication.
+ *
+ * Most of the comments in this file are from the example program this is based upon. Our comments
+ * for this implementation will be denoted as **comments about stuff**
+ */
 
 #include <Arduino.h>
 #include "ArdulinkMessageReceiver.h"
 
+// **This Initializes variables and serial communication**
 void ArdulinkMessageReceiver::init(bool(*customMessageHandler)(String), void(*keyPressMessageHandler)(char)) {
 	inputString = "";
 	stringComplete = false;
@@ -31,6 +34,7 @@ void ArdulinkMessageReceiver::init(bool(*customMessageHandler)(String), void(*ke
 	}
 }
 
+// **The main function that processes an input message (if there is one) and sends values of pins listened to**
 void ArdulinkMessageReceiver::processInput() {
 	if (stringComplete) {
 
@@ -38,13 +42,14 @@ void ArdulinkMessageReceiver::processInput() {
 
 			boolean msgRecognized = true;
 
+			// **This if statement and the else if for kprs messages are the only code in this class that is completely new and not from the example**
 			if (inputString.substring(6, 10) == "cust") { // Custom Message
 				int messageIdPosition = inputString.indexOf('?', 11);
 				String customMessage;
 				if (messageIdPosition > -1)
 					customMessage = inputString.substring(11, messageIdPosition);
 				else
-					customMessage = inputString.substring(11, inputString.length() - 1); //Ensures \n at end of string is not copied
+					customMessage = inputString.substring(11, inputString.length() - 1); //**Ensures \n at end of string is not copied**
 
 				msgRecognized = handleCustomMessage(customMessage);
 			}
