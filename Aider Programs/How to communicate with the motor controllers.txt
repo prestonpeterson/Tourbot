@@ -1,0 +1,12 @@
+There are 2 wires (not including ground wire) connected to each motor controller which are used to issue commands to the robot's motors.
+
+The first wire is connected to a digital pin and controls the motor enable function. Using digitalWrite() to write HIGH to those digital pins will disable the motors and bring them to a stop; writing LOW to those pins and allows the motor to move at the speed commanded by the second wire.
+
+The second wire is connected to a PWM pin which allows values to be sent to the motor with analogWrite(). Arduino can send PWM signals between 0 and 255 inclusive; however, 0 and 255 may not be used to assign a speed to the robot because a pure high or low signal is interpreted as an error by the motor controller. PWM signals between 128 and 254 define foward motion with 128 being minimum forward and 254 being max forward; PWM signals between 0 and 127 define reverse motion with 0 being max reverse and 127 being minimum reverse. Because Arduino cannot send a perfect 50% signal to tell the motors to stop, the motors must be disabled to bring the robot to a complete stop.
+
+NOTE: PWM signals to the robot must have a frequency of at least 1KHz and the Arduino normally does not produce this frequency. There are register values that can be modified to increase the clock speed for the PWM pins but note that there are different registers for different PWM pins. The following code is used in our programs to increase the frequency for pins 9 and 10 to 4kHz so moving the wires that control the motor would require a different register to be modified.
+
+int prescalerval = 0x07;
+TCCR2B &= ~prescalerval;
+prescalerval = 2;
+TCCR2B |= prescalerval;
