@@ -40,7 +40,8 @@ public class DualCamera {
         });
         try {
         	//Gets the list of available webcams and creates webcam objects
-                //NOTE: The position of the webcams in the list will vary
+                //NOTE: The order of the webcams in the list may vary based
+                //      upon the individual computer and usb ports used.
                 List<Webcam> webcamList = Webcam.getWebcams();
     		Webcam leftWebcam = webcamList.get(0);
                 Webcam rightWebcam = webcamList.get(1);
