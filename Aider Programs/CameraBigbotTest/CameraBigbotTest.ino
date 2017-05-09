@@ -35,8 +35,7 @@ void setup() {
   #endif
   // initialize sensors
   frontSensor.init();
-  leftSensor.init();
-  //rightSensor.init();
+  sideSensor.init();
 
   InitializeMotors();
 
@@ -61,7 +60,7 @@ void loop() {
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
 
-    inchesLeft = leftSensor.getDistanceIn();
+    inchesLeft = frontSensor.getDistanceIn();
   }
   StopIfPathObstructed();
   WallFollow(inchesLeft); 

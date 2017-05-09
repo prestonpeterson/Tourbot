@@ -20,11 +20,8 @@ bool frontStop;
 bool isCruising = false;
 
 // trigger, echo, volt, ground
-//HCSR04Ultrasonic frontRSensor();
-HCSR04Ultrasonic rightSensor(48, 49, 46, 47);
-HCSR04Ultrasonic frontSensor(52, 53, 50, 51);
-HCSR04Ultrasonic leftSensor(28, 29, 26, 27);
-
+HCSR04Ultrasonic sideSensor(52, 53, 50, 51);
+HCSR04Ultrasonic frontSensor(28, 29, 26, 27);
 
 void PrintInches(double inches) {
     DebugPrint(inches);
@@ -33,8 +30,7 @@ void PrintInches(double inches) {
 
 double GetInchesFromWall() {
   // TODO: add millis check to this function, and take it out of the rest of the code
-  if (currentWall == leftWall) return leftSensor.getDistanceIn();
-  else return rightSensor.getDistanceIn();
+  return sideSensor.getDistanceIn();
 }
 
 void TurnTowardsWall() {
@@ -47,10 +43,7 @@ void TurnAwayFromWall() {
   else TurnLeft();
 }
 
-void StopUntilPathClear(double inchesFront) {
-  return;
-  DebugPrint("OBSTACLE IN PATH! Inches: ");
-  PrintInches(inchesFront);
+void StopUntilPathClear() {
   while (frontStop) {
       delay(2000);
       double dist1 = frontSensor.getDistanceIn();
@@ -61,7 +54,7 @@ void StopUntilPathClear(double inchesFront) {
       DebugPrint("Front inches2: ");
       PrintInches(dist2);
       delay(70);
-      inchesFront = frontSensor.getDistanceIn();
+      double inchesFront = frontSensor.getDistanceIn();
       DebugPrint("Front inches3: ");
       PrintInches(inchesFront);
       if (dist1 > 24 && dist2 > 24 && inchesFront > 24) {
@@ -73,15 +66,28 @@ void StopUntilPathClear(double inchesFront) {
   }
 }
 
+void DebugSensors() {
+  delay(70);
+  double side = sideSensor.getDistanceIn();
+  double front = frontSensor.getDistanceIn();
+  DebugPrint("Side: ");
+  DebugPrint(side);
+  DebugPrint(". Front: ");
+  DebugPrintln(front);
+}
+
 void StopIfPathObstructed() {
   double inchesFront = frontSensor.getDistanceIn();
   if(inchesFront <= 24 && inchesFront >= 0) {
     delay(70);
     inchesFront = frontSensor.getDistanceIn();
     if(inchesFront <= 24 && inchesFront >= 0) {
+      DebugPrintln("PATH OBSTRUCTED!");
+      DebugPrint("Inches from obstacle: ");
+      PrintInches(inchesFront);
       userDisable();
       frontStop = true;
-      StopUntilPathClear(inchesFront);
+      StopUntilPathClear();
     }
   }
   else {
