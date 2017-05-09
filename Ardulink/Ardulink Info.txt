@@ -1,0 +1,8 @@
+Ardulink is a Java library that uses serial communication to send messages to an Arduino board. For our project we used Ardulink version 0.6.1-Magnum PI because examples and tutorials for version 2.0 are pretty much nonexistant. The full Ardulink library may be downloaded from their website, but we only used the Ardulink Core JAR.
+
+The Arduino Library also requires rxtxSerial.dll in order to run; including this as part of the code for a program is a complete pain and varies from IDE to IDE. There is little advice I can give on getting it to work properly if System.load does not work for it, just search the internet and pray you find the solution.
+
+The main object used for Ardulink is the Link object which creates a connection with a specific serial port and then may send messages to the Arduino through that port. 
+
+For a good explaination for the types of messages that can be sent by Ardulink, see http://www.ardulink.org/ardulink-messages, but the only message type we use is the custom message. The Link function sendCustomMessage() sends a string to the Arduino board which is read and handled by our ArdulinkMessageReciever library.
+
