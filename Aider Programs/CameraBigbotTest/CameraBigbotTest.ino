@@ -1,4 +1,5 @@
-#define DEBUG
+//#define DEBUG
+
 #ifdef DEBUG
 #define DebugPrint(x) Serial.print(x)
 #define DebugPrintln(x) Serial.println(x)
@@ -48,6 +49,7 @@ void setup() {
   // set motors to off
   motorOff = true;
   frontStop = true;
+  DebugPrintln("BEGIN");
 }
 
 void loop() {
@@ -56,14 +58,15 @@ void loop() {
   #endif
 
   unsigned long currentMillis = millis();
-  int inchesLeft = 0;
+ 
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
 
-    inchesLeft = frontSensor.getDistanceIn();
+    int inchesLeft = sideSensor.getDistanceIn();
+    WallFollow(inchesLeft); 
   }
   StopIfPathObstructed();
-  WallFollow(inchesLeft); 
+  
 }
 
 ////////////////Ardulink////////////////////

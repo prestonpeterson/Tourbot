@@ -68,9 +68,15 @@ void ClearMotors() {
   userEnable();
 }
 
+void IdleMotors() {
+  PWMValLeft = 127;
+  PWMValRight = 127;
+  updateSpeed();
+}
+
 void TurnLeft() {
   PWMValLeft = 94;
-  PWMValRight = 160;
+  PWMValRight = 155;
   updateSpeed();
 }
 

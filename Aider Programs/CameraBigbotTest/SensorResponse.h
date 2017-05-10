@@ -107,13 +107,14 @@ void CloseToWall() {
   StopIfPathObstructed();
   if (lastTurnExecuted == towardWall) {
     DebugPrintln("Going forward slowly for 500 ms");
-    SuperSlowForward();
+    SlowForward();
     delay(500);
     StopIfPathObstructed();
   }
   
   lastTurnExecuted = awayFromWall;
-  ClearMotors();
+  //ClearMotors();
+  IdleMotors();
   double newdist = GetInchesFromWall();
   if (newdist > dist + 0.4) {
     DebugPrintln("Farther from wall after turning; now moving forward...");
@@ -127,12 +128,12 @@ void CloseToWall() {
       newdist = GetInchesFromWall();
       if (newdist < initialInches - 0.5) {
         TurnAwayFromWall();
-        delay(350);
+        delay(450);
         return;
       }
     }
     TurnTowardsWall();
-    delay(600);
+    delay(300);
     StopIfPathObstructed();
   }
 }
@@ -149,25 +150,26 @@ void FarFromWall() {
   PrintInches(dist);
   TurnTowardsWall();
   delay(700);
+  dist = GetInchesFromWall();
   StopIfPathObstructed();
-  if (lastTurnExecuted == awayFromWall) {
+  //if (lastTurnExecuted == awayFromWall) {
     DebugPrintln("Going forward slowly for 500 ms");
-    SuperSlowForward();
+    SlowForward();
     delay(500);
     StopIfPathObstructed();
-  }
+  //}
   lastTurnExecuted = towardWall;
-  ClearMotors();
+  IdleMotors();
   double newdist = GetInchesFromWall();
   DebugPrint("Inches from wall: ");
   PrintInches(newdist);
-  if (newdist < dist - 0.4) {
+  if (newdist < dist - 0.3) {
     int initialInches = newdist;
     DebugPrintln("Closer to wall after turning; now moving forward...");
     // while distance > maxRange: go forward, delay 250ms, check distance again
     while (newdist > highThreshold + 3) {
       SlowForward();
-      delay(70);
+      delay(300);
       StopIfPathObstructed();
       newdist = GetInchesFromWall();
       if (newdist > initialInches + 0.5) {
@@ -177,8 +179,8 @@ void FarFromWall() {
       }
     }
     dist = newdist;
-    TurnAwayFromWall();
-    delay(600);
+    //TurnAwayFromWall();
+    delay(300);
     StopIfPathObstructed();
   }
 }
