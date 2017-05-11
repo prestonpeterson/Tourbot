@@ -13,7 +13,7 @@ enum walls {leftWall, rightWall};
 
 events event = none;
 turns lastTurnExecuted = nothing;
-walls currentWall = rightWall;
+walls currentWall = leftWall;
 
 bool checkingForObstacle = false;
 bool frontStop;
@@ -121,6 +121,11 @@ void CloseToWall() {
     int initialInches = newdist;
     // while distance > maxRange: go forward, delay 250ms, check distance again
     while (newdist < lowThreshold + 2) {
+      Receiver.getInput();
+      Receiver.processInput();
+      if (motorOff)
+        return;
+      
       SlowForward();
       delay(70);
       StopIfPathObstructed();
@@ -168,6 +173,11 @@ void FarFromWall() {
     DebugPrintln("Closer to wall after turning; now moving forward...");
     // while distance > maxRange: go forward, delay 250ms, check distance again
     while (newdist > highThreshold + 3) {
+      Receiver.getInput();
+      Receiver.processInput();
+      if (motorOff)
+        return;
+      
       SlowForward();
       delay(300);
       StopIfPathObstructed();

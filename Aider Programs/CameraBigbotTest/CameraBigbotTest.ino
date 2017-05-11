@@ -11,10 +11,13 @@
 #include <Wire.h>
 #include <HCSR04Ultrasonic.h>
 #include <ArdulinkMessageReceiver.h>
-#include "Locomotion.h"
-#include "SensorResponse.h"
 
 ArdulinkMessageReceiver Receiver;
+// boolean to set motors to off, to avoid gradual roll
+bool motorOff;
+
+#include "Locomotion.h"
+#include "SensorResponse.h"
 
 boolean handleCustomMessage(String message);
 
@@ -23,9 +26,6 @@ void keyPressStub(char key) {}
 // timer for ultrasonic
 unsigned long const interval = 70;
 unsigned long previousMillis = 0;
-
-// boolean to set motors to off, to avoid gradual roll
-bool motorOff;
 
 void setup() {
   // initialize Ardulink
