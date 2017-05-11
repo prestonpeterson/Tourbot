@@ -30,8 +30,11 @@ bool motorOff;
 void setup() {
   // initialize Ardulink
   #ifndef DEBUG
+    // set motors to off until a message is received
+    motorOff = true;
     Receiver.init(handleCustomMessage, keyPressStub);
   #else
+    motorOff = false;
     Serial.begin(9600);
   #endif
   // initialize sensors
@@ -46,8 +49,6 @@ void setup() {
   prescalerval = 2;
   TCCR2B |= prescalerval;
 
-  // set motors to off
-  motorOff = true;
   frontStop = true;
   DebugPrintln("BEGIN");
 }
@@ -55,6 +56,8 @@ void setup() {
 void loop() {
   #ifndef DEBUG
     Receiver.processInput();
+    if (motorOff)
+      return;
   #endif
 
   unsigned long currentMillis = millis();
@@ -70,9 +73,11 @@ void loop() {
 }
 
 ////////////////Ardulink////////////////////
+#ifndef DEBUG
 void serialEvent() {
   Receiver.getInput();
 }
+#endif
 
 boolean handleCustomMessage(String message) {
   motorOff = false;
