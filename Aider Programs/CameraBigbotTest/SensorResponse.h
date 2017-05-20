@@ -1,15 +1,24 @@
 /*
- * Functions that 
+ * Functions that make use of the data collected from the sensors.
+ * Currently only ultrasonic sensors.
  */
 #ifndef SENSORRESPONSE
 #define SENSORRESPONSE
-const int lowThreshold = 8;
-const int highThreshold = 12;
-const int maxThreshold = 100;
+// the following values are in inches
+const int lowThreshold = 8; // threshold for being too close to wall
+const int highThreshold = 12; // threshold for being too far from wall
+const int maxThreshold = 100; // threshold to know when a wall is not detected
 
+/* Ultrasonic sensor events:
+ * rangeBelow: too close to wall
+ * rangeAbove: too far from wall
+ * rangeHigh: no wall detected, possibly in an intersection of hallways
+ */
 enum events {none, rangeBelow, rangeAbove, rangeHigh};
-enum turns {nothing, towardWall, awayFromWall};
-enum walls {leftWall, rightWall};
+enum turns {nothing, towardWall, awayFromWall}; // to keep track of last turn that was executed
+enum walls {leftWall, rightWall}; // allow switching between right wall-following or left wall-following
+// currently, to switch which wall to follow, the current ultrasonic must be unplugged and replaced with the
+// side for the desired wall-following
 
 events event = none;
 turns lastTurnExecuted = nothing;
@@ -19,10 +28,11 @@ bool checkingForObstacle = false;
 bool frontStop;
 bool isCruising = false;
 
-// trigger, echo, volt, ground
+// HCSR04Ultrasonic variableName( triggerPin, echoPin, volt, ground )
 HCSR04Ultrasonic sideSensor(52, 53, 50, 51);
 HCSR04Ultrasonic frontSensor(28, 29, 26, 27);
 
+// used for debugging the ultrasonic sensor values
 void PrintInches(double inches) {
     DebugPrint(inches);
     DebugPrintln();

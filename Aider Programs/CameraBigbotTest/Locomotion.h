@@ -1,6 +1,7 @@
-/* Header file that contains functions that drive the motion 
+/* 
+ * Header file that contains functions that drive the motion 
  * of the robot.
-*/
+ */
 #ifndef LOCOMOTION
 #define LOCOMOTION
 // left motor

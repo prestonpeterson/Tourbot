@@ -1,5 +1,6 @@
 //#define DEBUG
 
+// functions that only print when debugging
 #ifdef DEBUG
 #define DebugPrint(x) Serial.print(x)
 #define DebugPrintln(x) Serial.println(x)
