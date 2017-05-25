@@ -1,14 +1,13 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This program continuously takes images from a webcam, checks if they
+ * match a specific color, and sends a message to the Arduino board indicating
+ * if the image matches the color.
+ *
+ * The function getPixelPercentage can easily be replaced with any other image
+ * matching function to recognize more impressive landmarks.
  */
 package imagetest;
 
-/**
- *
- * @author Darth Scoutious
- */
 import javax.imageio.ImageIO;
 
 import com.github.sarxos.webcam.Webcam;
@@ -25,6 +24,8 @@ import org.zu.ardulink.event.DisconnectionEvent;
 import org.zu.ardulink.protocol.IProtocol;
 public class ArdulinkImageTest {
     public static void main(String[] args) {
+        //Loads rxtxSerial.dll needed for Ardulink
+        //System.load("File path here");
         int pixelPercentage = 0;
     	
     	Link link = Link.getDefaultInstance();
@@ -69,6 +70,7 @@ public class ArdulinkImageTest {
     		BufferedImage image;
             //BufferedImage img = ImageIO.read(new File("src/redshirt.jpg"));
             
+            //Gets the serial port and connects to the Arduino
             List<String> portList = link.getPortList();
             if(portList != null && portList.size() > 0) {
               String port = portList.get(0);
@@ -77,9 +79,12 @@ public class ArdulinkImageTest {
               System.out.println("Connected:" + connected);
               Thread.sleep(2000);
               while(true) {
+                //Gets the image from the camera and tests color match
                 image = webcam.getImage();
                 pixelPercentage = getPixelPercent(image);
                 System.out.println("Percent match: " + pixelPercentage);
+                
+                //Sends message to Arduino whether the image was a match
                 if(pixelPercentage > 70) {
                   System.out.println("YES");
                   link.sendCustomMessage("YES");
@@ -89,6 +94,7 @@ public class ArdulinkImageTest {
                 }
                 Thread.sleep(250);
               }
+              //These functions are only needed if the program terminates
               //link.disconnect();
               //webcam.close();
             } else {

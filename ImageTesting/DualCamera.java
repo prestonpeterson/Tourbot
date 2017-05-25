@@ -22,6 +22,8 @@ import org.zu.ardulink.event.DisconnectionEvent;
 public class DualCamera {
     
     public static void main(String[] args) {
+        //Loads rxtxSerial.dll needed for Ardulink
+        //System.load("File path here");
         int leftPixelPercentage = 0, rightPixelPercentage = 0;
     	
     	Link link = Link.getDefaultInstance();
