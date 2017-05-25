@@ -4,6 +4,7 @@ This class allows control of the HC-SR04 Ultrasonic sensor
 #include <Arduino.h>
 #include "HCSR04Ultrasonic.h"
 
+// constructor for when using dedicated voltage and ground pins
 HCSR04Ultrasonic::HCSR04Ultrasonic(int triggerPinNum, int echoPinNum) {
 	triggerPin = triggerPinNum;
 	echoPin = echoPinNum;
@@ -11,6 +12,7 @@ HCSR04Ultrasonic::HCSR04Ultrasonic(int triggerPinNum, int echoPinNum) {
 	groundPin = -1;
 }
 
+// constructor for when not using dedicated voltage and ground pins
 HCSR04Ultrasonic::HCSR04Ultrasonic(int triggerPinNum, int echoPinNum, int voltPinNum, int groundPinNum){
 	triggerPin = triggerPinNum;
 	echoPin = echoPinNum;

@@ -1,3 +1,9 @@
+/*
+ * NOTE: There is an issue with using more than 2 ultrasonic sensors at the same time.
+ * This may be due to using the pulseIn function. Due to lack of time, we were not able to test this theory.
+ * However, this can be tested using the NewPing library. http://playground.arduino.cc/Code/NewPing
+ */
+
 //#define DEBUG
 
 // functions that only print when debugging
@@ -25,6 +31,7 @@ boolean handleCustomMessage(String message);
 void keyPressStub(char key) {}
 
 // timer for ultrasonic
+// prevents overlap between pulses
 unsigned long const interval = 70;
 unsigned long previousMillis = 0;
 
@@ -44,12 +51,16 @@ void setup() {
 
   InitializeMotors();
 
-  // change PWM frequency
-  int prescalerval = 0x07;
-  TCCR2B &= ~prescalerval;
-  prescalerval = 2;
-  TCCR2B |= prescalerval;
+  // change PWM frequency to 4000 Hz on timer 2
+  // this is needed because the motors on the robot require a higher pwm frequency than
+  // the default pwm frequency that the arduino mega can produce
+  int prescalerval = 0x07; // used as an 'eraser'
+  TCCR2B &= ~prescalerval; // sets first 3 bits from right to 0 using the 'eraser'
+  prescalerval = 2; // used to set timer to 4000 Hz
+  TCCR2B |= prescalerval; // sets the timer to 4000 Hz
 
+  // boolean used to detect if there is an obstacle in the robots path
+  // set to true initially so that robot begins in a stopped state
   frontStop = true;
   DebugPrintln("BEGIN");
 }

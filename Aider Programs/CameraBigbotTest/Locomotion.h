@@ -17,6 +17,9 @@ int PWMValLeft; // = 127;
 
 void ClearMotors();
 
+// function to initialize the digital control of the motors
+// and to set the motors to ~50% pwm, which should keep them from moving
+// for the most part
 void InitializeMotors() {
   // motor control
   pinMode(digitalPinLeft, OUTPUT);
@@ -26,6 +29,8 @@ void InitializeMotors() {
   ClearMotors();
 }
 
+// a check to ensure that the pwm values sent are not out of bounds
+// we used 8-248 to allow us the use increments of 10
 void boundsCheck() {
   if (PWMValRight > 248) PWMValRight = 248;
   
@@ -36,6 +41,9 @@ void boundsCheck() {
   if (PWMValLeft < 8) PWMValLeft = 8;
 }
 
+// disables the motors by sending a high digital signal
+// also sets the pwm values to 127 in order to overwrite their previous values
+// this prevents the robot from suddenly moving when it is re-enabled
 void userDisable() {
   PWMValLeft = 127;
   PWMValRight = 127;
@@ -43,6 +51,9 @@ void userDisable() {
   digitalWrite(digitalPinLeft, HIGH);
 }
 
+// enables use of the motors
+// pwm values are set to 127 to make sure the robot does not immediately start moving
+// due to a previous value
 void userEnable() {
   digitalWrite(digitalPinRight, LOW);
   digitalWrite(digitalPinLeft, LOW);
@@ -51,6 +62,8 @@ void userEnable() {
   PWMValRight = 127;
 }
 
+// sends the pwm signal to the motors
+// and a digital low signal to make sure motors are enabled
 void setMotorSpeed() {
   digitalWrite(digitalPinRight, LOW);
   analogWrite(analogPinRight, PWMValRight);
@@ -58,17 +71,23 @@ void setMotorSpeed() {
   analogWrite(analogPinLeft, PWMValLeft);
 }
 
+// calls bounds check to prevent out of bounds errors
+// then sends the pwm values to the motors
 void updateSpeed() {
   boundsCheck();
   setMotorSpeed();
 }
 
+// disables the motors and resets the pwm values for left and right to ~50%
+// then enables the motors
 void ClearMotors() {
   userDisable();
   delay(100);
   userEnable();
 }
 
+// sets the pwm values for both sides to ~50%
+// then updates speed
 void IdleMotors() {
   PWMValLeft = 127;
   PWMValRight = 127;
