@@ -1,7 +1,10 @@
 /*
  * NOTE: There is an issue with using more than 2 ultrasonic sensors at the same time.
+ * A third or fourth sensor always returned 0 distance regardless of where it was plugged in;
+ * we have replaced the sensors, wires, and even the Arduino Mega so the issue must be software related.
  * This may be due to using the pulseIn function. Due to lack of time, we were not able to test this theory.
- * However, this can be tested using the NewPing library. http://playground.arduino.cc/Code/NewPing
+ * However, this can be tested using the NewPing library in place of our Ultrasonic library.
+ * http://playground.arduino.cc/Code/NewPing
  */
 
 //#define DEBUG
