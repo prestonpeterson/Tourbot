@@ -1,0 +1,8 @@
+The motor controllers have 3 wire connectors attached to them.
+
+The one on the top left is the feedback connector from the motors and should be left alone.
+
+The top right plug is for the COMM connector; this allows the motors to communicate with each other with a CAN bus (which is not enabled in the motors' configs) and allows the motors to communicate with a computer using RS-232. The RS-232 connector is how the motors are configured using Driveware. 
+NOTE: 2 of the RS-232 connectors have been ripped off after being caught by the wheels; there are 2 new connectors to reattach the wires to and fix it but we never had the time to reattach them. Make sure the wires are connected into the correct slots in the plug; the correct slots can be determined either by just copying the one that is still in tact or by looking up datasheets for the controller and diagrams of an RS-232 plug and matching RX, TX, and ground.
+
+Lastly the connector on the middle right is the Input/Output connector which actually controls the motor; there are no wires currently assigned for output but there are a few for input. The connector plugs that formerly connected to the handheld controller and are currently connected to the Arduino are wired into digital input 1 (the motor enable), analog input (for the handheld controller to set speed, not used in current config), and the ground. There is also a seperate wire connected to digital input 4 from the Arduino which is the only one capable of receiving PWM signals.
