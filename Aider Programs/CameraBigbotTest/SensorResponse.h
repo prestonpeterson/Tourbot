@@ -131,7 +131,7 @@ void CloseToWall() {
     int initialInches = newdist;
     // while distance > maxRange: go forward, delay 250ms, check distance again
     while (newdist < lowThreshold + 2) {
-      Receiver.getInput();
+      Receiver.getInput(); // Ardulink messages processed here because of the while loop
       Receiver.processInput();
       if (motorOff)
         return;
@@ -183,7 +183,7 @@ void FarFromWall() {
     DebugPrintln("Closer to wall after turning; now moving forward...");
     // while distance > maxRange: go forward, delay 250ms, check distance again
     while (newdist > highThreshold + 3) {
-      Receiver.getInput();
+      Receiver.getInput(); // Ardulink messages processed here because of the while loop
       Receiver.processInput();
       if (motorOff)
         return;
