@@ -53,9 +53,27 @@ void TurnAwayFromWall() {
   else TurnLeft();
 }
 
+// Helper method that just takes a reading from each sensor and prints the result to the com port.
+void DebugSensors() {
+  delay(70);
+  double side = sideSensor.getDistanceIn();
+  double front = frontSensor.getDistanceIn();
+  DebugPrint("Side: ");
+  DebugPrint(side);
+  DebugPrint(". Front: ");
+  DebugPrintln(front);
+}
+
+// Called by StopIfPathObstructed(). Keeps the motors off until the path is clear.
 void StopUntilPathClear() {
   while (frontStop) {
-      delay(2000);
+      // While halted, check for obstacles every 2 seconds.
+      delay(2000); 
+      /*
+       Due to the inconsistent nature of ultrasonic ranging, take 3 ultrasonic readings.
+       The path will not be considered clear until all 3 readings return a distance that
+       is greater than the desired buffer zone.
+      */
       double dist1 = frontSensor.getDistanceIn();
       DebugPrint("Front inches1: ");
       PrintInches(dist1);
@@ -76,16 +94,8 @@ void StopUntilPathClear() {
   }
 }
 
-void DebugSensors() {
-  delay(70);
-  double side = sideSensor.getDistanceIn();
-  double front = frontSensor.getDistanceIn();
-  DebugPrint("Side: ");
-  DebugPrint(side);
-  DebugPrint(". Front: ");
-  DebugPrintln(front);
-}
-
+// This function can be called to prevent forward collisions. It will stop the motors
+// until the path in front is no longer blocked.
 void StopIfPathObstructed() {
   double inchesFront = frontSensor.getDistanceIn();
   if(inchesFront <= 24 && inchesFront >= 0) {
@@ -106,8 +116,17 @@ void StopIfPathObstructed() {
   }
 }
 
+// Called when vehicle is too close to a wall and must move away.
 void CloseToWall() {
-  // check distance
+  /*
+  Algorithm: Turn away from the wall, measure the new distance from wall, go forward, measure distance again.
+    If:
+      1) new distance is farther from the wall: continue moving forward until distance from wall is outside of the
+         minimum allowed distance.
+      2) new distance is not farther from the wall: this means that the vehicle must keep turning away from the wall.
+         To achieve this, we simply do nothing as when the function ends it will be called again by the WallFollow() function,
+         effectively causing it to start from the beginning.
+  */
   double dist = GetInchesFromWall();
   DebugPrint("CloseToWall()! Inches: ");
   PrintInches(dist);
@@ -154,6 +173,9 @@ void CloseToWall() {
 }
 
 void FarFromWall() {
+  /*
+  Refer to CloseToWall() function, for explanation of the wall-following algorithm used.
+  */
   
   //stop
   ClearMotors();
